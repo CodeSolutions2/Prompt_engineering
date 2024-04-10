@@ -44,8 +44,8 @@ async function run() {
   
   const OPENAI_API_KEY = document.getElementById("apikey").value;
   console.log('OPENAI_API_KEY: ', OPENAI_API_KEY);
-
-      var model_name = 'gpt-3.5-turbo';
+  
+  var model_name = 'gpt-3.5-turbo';
       var temperature = 0;
 
       // ------------------------------------------
@@ -61,7 +61,7 @@ async function run() {
           // Print text part of JSON response only with user message
           return await fetch(url, options)
             .then(res => res.json())
-            .then(res => {document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))['choices'][0]['message']['content']}`; return JSON.parse(JSON.stringify(res))['choices'][0]['message']['content']})
+            .then(res => {document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))}`; return JSON.parse(JSON.stringify(res))})
             .catch(error => { console.log(error); });
 
 }
