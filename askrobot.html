@@ -33,9 +33,7 @@
       border-radius: 5px;}</style>
 
 
-
     <script>
-    // -----------------------------------
 
 async function run() {
   
@@ -43,30 +41,28 @@ async function run() {
   console.log('prompt: ', prompt);
   
   const OPENAI_API_KEY = document.getElementById("apikey").value;
-  console.log('OPENAI_API_KEY: ', OPENAI_API_KEY);
+  // console.log('OPENAI_API_KEY: ', OPENAI_API_KEY);
   
   var model_name = 'gpt-3.5-turbo';
-      var temperature = 0;
-
-      // ------------------------------------------
-        var system_content = "You are a helpful assistant"
-        var assistant_content = "Respond concisely"
-        var messages = [{"role": "system", "content": system_content}, {"role": "user", "content": prompt}, {"role": "assistant", "content": assistant_content}];
-        var data = {"model": model_name, 'messages': messages, 'temperature': temperature};
-        var url = 'https://api.openai.com/v1/chat/completions'
-        var headers = {"Content-Type": "application/json", "Authorization": 'Bearer ' + OPENAI_API_KEY}
-        var options = {method : 'post', headers: headers, body : JSON.stringify(data)};
+  var temperature = 0;
+  
+  // ------------------------------------------
+  var system_content = "You are a helpful assistant"
+  var assistant_content = "Respond concisely"
+  var messages = [{"role": "system", "content": system_content}, {"role": "user", "content": prompt}, {"role": "assistant", "content": assistant_content}];
+  var data = {"model": model_name, 'messages': messages, 'temperature': temperature};
+  var url = 'https://api.openai.com/v1/chat/completions'
+  var headers = {"Content-Type": "application/json", "Authorization": 'Bearer ' + OPENAI_API_KEY}
+  var options = {method : 'post', headers: headers, body : JSON.stringify(data)};
        
   
-          // Print text part of JSON response only with user message
-          return await fetch(url, options)
+  // Print text part of JSON response only with user message
+  return await fetch(url, options)
             .then(res => res.json())
-            .then(res => {document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))}`; return JSON.parse(JSON.stringify(res))})
+            .then(res => {document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))['choices'][0]['message']['content']}`; return JSON.parse(JSON.stringify(res))['choices'][0]['message']['content']})
             .catch(error => { console.log(error); });
 
 }
-          
-// -----------------------------------
 
   </script>
   </body>
