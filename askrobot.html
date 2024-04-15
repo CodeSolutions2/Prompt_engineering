@@ -56,9 +56,10 @@ async function run() {
   return await fetch(url, options)
             .then(res => res.json())
             .then(res => {
-                          document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))}`; 
-                          return JSON.parse(JSON.stringify(res));
-                  //['choices'][0]['message']['content']
+                          // document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))}`; 
+                          // return JSON.parse(JSON.stringify(res));
+                          document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))['choices'][0]['message']['content']}`; 
+                          return JSON.parse(JSON.stringify(res))['choices'][0]['message']['content'];
             })
             .catch(error => { console.log(error); });
 
