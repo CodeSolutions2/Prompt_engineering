@@ -55,7 +55,11 @@ async function run() {
   // Print text part of JSON response only with user message
   return await fetch(url, options)
             .then(res => res.json())
-            .then(res => {document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))['choices'][0]['message']['content']}`; return JSON.parse(JSON.stringify(res))['choices'][0]['message']['content']})
+            .then(res => {
+                          document.getElementById("Response").innerHTML = `The OpenAI model ${model_name} response is : ${JSON.parse(JSON.stringify(res))}`; 
+                          return JSON.parse(JSON.stringify(res));
+                  //['choices'][0]['message']['content']
+            })
             .catch(error => { console.log(error); });
 
 }
