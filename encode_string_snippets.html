@@ -7,9 +7,11 @@
 
     <br><br>
 
-    <h3>String Snippet to encode:</h3>
+     The purpose of this application is to replicate encoding functionality of <a href="https://www.base64encode.org/enc/map">https://www.base64encode.org/enc/map</a> to understand the mapping of encoding methods. 
 
-    The purpose of this application is to replicate encoding functionality of <a>https://www.base64encode.org/enc/map</a> such that string/data information can remain in both private and public repositories, without the reader immediately understanding the data thus allowing for a basic level of data security.
+    <br><br>
+    
+    <h3>String Snippet to encode:</h3>
     
     <input id="string_snippet" type="text" value="" placeholder="Enter the string snippet to encode here" rows="3" cols="100">
     
@@ -19,10 +21,17 @@
       
     <br><br>
       
-    <label id="Response_label" style="display:none">Encoded string snippet</label>
+    <label id="Base64_encoded_label" style="display:none">Base64 encoded string snippet</label>
     <br>
-    <textarea id="Response" rows="4" cols="100" placeholder="Response" style="display:block"></textarea>
+    <textarea id="Base64_encoded" rows="4" cols="100" placeholder="Base64_encoded" style="display:block"></textarea>
     <br>
+
+    <label id="Base64_decoded_label" style="display:none">Base64 decoded string snippet</label>
+    <br>
+    <textarea id="Base64_decoded" rows="4" cols="100" placeholder="Base64_decoded" style="display:block"></textarea>
+    <br>
+
+    
 
 <!-- --------------------------------------------------- -->
 
@@ -43,13 +52,13 @@
 
 async function run() {
   
-  // This app is a replication of , to understand the mapping of encoding methods
-  
   const string_snippet = document.getElementById("string_snippet").value;
 
-  document.getElementById("Response").innerHTML = `The encoded string snippet is : ${btoa(string_snippet)}.`;
+  const string_snippet_encoded = btoa(string_snippet);
+  document.getElementById("Base64_encoded").innerHTML = `The base64 encoded string snippet is : ${string_snippet_encoded}.`;
 
-  // Maybe include convertion to binaryString --> bufferArray --> then back 
+  const string_snippet_decoded = atob(string_snippet_encoded);
+  document.getElementById("Base64_decoded").innerHTML = `The base64 decoded string snippet is : ${string_snippet_decoded}.`;
   
 
 }
