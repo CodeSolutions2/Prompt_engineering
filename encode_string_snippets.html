@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    
+    <h1 style='text-align: center; margin-bottom: -35px;'>Encode a string snippet</h1>
+
+    <br><br>
+
+    <h3>String Snippet to encode:</h3>
+    <input id="string_snippet" type="text" value="" placeholder="Enter the string snippet to encode here" rows="3" cols="100">
+    
+    <br><br>
+
+    <button id="Run_Selection" onclick="run()">Run Selection</button>
+      
+    <br><br>
+      
+    <label id="Response_label" style="display:none">Encoded string snippet</label>
+    <br>
+    <textarea id="Response" rows="4" cols="100" placeholder="Response" style="display:block"></textarea>
+    <br>
+
+<!-- --------------------------------------------------- -->
+
+<!-- CSS -->
+<style type="text/css">
+  textarea#Response {
+      background-color: #b8d4d6;
+      border: 0.5px grey;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;}
+</style>
+
+<!-- --------------------------------------------------- -->
+
+<script>
+
+
+async function run() {
+  
+  // This app is a replication of https://www.base64encode.org/enc/map, to understand the mapping of encoding methods
+  
+  const string_snippet = document.getElementById("string_snippet").value;
+
+  document.getElementById("Response").innerHTML = `The encoded string snippet is : ${btoa(string_snippet)}.`;
+
+  // Maybe include convertion to binaryString --> bufferArray --> then back 
+  
+
+}
+
+</script>
+  </body>
+</html>
