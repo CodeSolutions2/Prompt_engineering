@@ -64,6 +64,7 @@ Type in the url to view a pdf (ie: https://raw.githubusercontent.com/CodeSolutio
 <br>
 <input id="file_download_url" type="text" value="" placeholder="file_download_url" rows="10" cols="100" style="display:block; text-align: left; width: 600px;">
 <br>
+<button id="show_pdf_wo_CORS" onclick="show_pdf_wo_CORS()">View the selected pdf</button>
 <!-- Text DOM outputs -->
 <div id="output_FILE_ID"></div>
 <div id="output_ASSISTANT_ID"></div>
@@ -123,8 +124,10 @@ document.getElementById('output_RUN_ID').innerHTML = RUN_ID;
 // ----------------------------------------------------
 
 async function processEvent(event) {
-	
-    if (document.getElementById("give_response_using_file").checked == false) {
+
+    // 
+    // if (document.getElementById("give_response_using_file").checked == false) {
+    if (this.getAttribute("checked") == false) {
 	document.getElementById("prompt").style.display = "none";
     } else  {
 	document.getElementById("prompt").style.display = "block";
@@ -140,10 +143,6 @@ document.getElementById("give_response_using_file").addEventListener("click", pr
 // ----------------------------------------------------
 // 
 // ----------------------------------------------------
-if (document.getElementById("generate_a_plot").checked == false && document.getElementById("embedding_analysis").checked == false && document.getElementById("extract_text_from_image").checked == false && document.getElementById("give_response_using_file").checked == true) {
-	document.getElementById("prompt").style.display = "block";
-}
-	
 async function assign_the_task_prompts(){
 
 	const generate_a_plot = document.getElementById("generate_a_plot").checked;
