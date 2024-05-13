@@ -130,19 +130,19 @@ document.getElementById('output_RUN_ID').innerHTML = RUN_ID;
 // ----------------------------------------------------
 // 
 // ----------------------------------------------------
-const generate_a_plot = document.getElementById("generate_a_plot").checked;
-const embedding_analysis = document.getElementById("embedding_analysis").checked;
-const extract_text_from_image = document.getElementById("extract_text_from_image").checked;
-const give_response_using_file = document.getElementById("give_response_using_file").checked;
-
-if (generate_a_plot == false && embedding_analysis == false && extract_text_from_image == false && give_response_using_file == true) {
+if (document.getElementById("generate_a_plot").checked == false && document.getElementById("embedding_analysis").checked == false && document.getElementById("extract_text_from_image").checked == false && document.getElementById("give_response_using_file").checked == true) {
 	document.getElementById("prompt").style.display = "block";
 }
 	
 async function assign_the_task_prompts(){
 
-	
+	const generate_a_plot = document.getElementById("generate_a_plot").checked;
+	const embedding_analysis = document.getElementById("embedding_analysis").checked;
+	const extract_text_from_image = document.getElementById("extract_text_from_image").checked;
+	const give_response_using_file = document.getElementById("give_response_using_file").checked;
 
+	// ------------------------
+	
 	// Step A
 	var upload_files_filename = document.getElementById("file_name").value; 
 
