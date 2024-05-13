@@ -12,16 +12,33 @@
 <th id="pdf_viewer_input">
 <h1>Using OpenAI Assistant</h1>
 
-  Generate a plot
-  Embedding analysis
-  Extract text on a image file (pdfimage, image)
-  Give a response using text file information
-  
-Type in the url to view a pdf (ie: https://raw.githubusercontent.com/CodeSolutions2/pdf_to_text_webapp/main/document.pdf, https://raw.githubusercontent.com/CodeSolutions2/pdf_to_text_webapp/main/document_imagepdf.pdf).
-<h3>View PDF</h3>
-<input id="file_download_url" type="text" value="" placeholder="file_download_url" rows="10" cols="100" style="display:block; text-align: left; width: 600px;">
-<br>
-<h3>OpenAI assistant to analyze file: run all steps or individual steps</h3>
+<h3>[Step 0] Enter Assistant task</h3>
+<fieldset>
+      <div>
+        <input type="radio" id="generate_a_plot" name="radio_name" value="generate_a_plot" />
+        <label for="generate_a_plot">Generate a plot</label>
+      </div>
+
+      <div>
+        <input type="radio" id="embedding_analysis" name="radio_name" value="embedding_analysis" />
+        <label for="embedding_analysis">Embedding analysis</label>
+      </div>
+
+      <div>
+        <input type="radio" id="extract_text_from_image" name="radio_name" value="extract_text_from_image" />
+        <label for="extract_text_from_image">Extract text on a image file (pdfimage, image)</label>
+      </div>
+
+      <div>
+        <input type="radio" id="give_response_using_file" name="radio_name" value="give_response_using_file" />
+        <label for="give_response_using_file">Give a response using text file information</label>
+      </div>
+</fieldset>
+
+<h3>[Step 1] Enter file name in repository to include in analysis (ie: file_pdf_img.pdf)</h3>
+<input id="file_name" type="text" value="" placeholder="file_name" rows="10" cols="100" style="display:block; text-align: left; width: 600px;">
+	
+<h3>[Step 2] Run  ALL the Assistant steps OR INDIVIDUAL stpes to respond to the task</h3>
 <input id="OPENAI_API_KEY" type="text" value="" placeholder="OPENAI_API_KEY" rows="10" cols="100" style="display:block; text-align: left; width: 150px;">
 <br>
 <h4>(OPTION A) All steps automated for OpenAI assistant:</h4>
@@ -48,6 +65,12 @@ Type in the url to view a pdf (ie: https://raw.githubusercontent.com/CodeSolutio
 <!-- ---------------------------------------- -->
 
 <th id="pdf_viewer_output">
+
+<h3>View PDF</h3>
+Type in the url to view a pdf (ie: https://raw.githubusercontent.com/CodeSolutions2/pdf_to_text_webapp/main/document.pdf, https://raw.githubusercontent.com/CodeSolutions2/pdf_to_text_webapp/main/document_imagepdf.pdf).
+<br>
+<input id="file_download_url" type="text" value="" placeholder="file_download_url" rows="10" cols="100" style="display:block; text-align: left; width: 600px;">
+<br>
 <!-- Text DOM outputs -->
 <div id="output_FILE_ID"></div>
 <div id="output_ASSISTANT_ID"></div>
@@ -104,21 +127,112 @@ document.getElementById('output_THREAD_ID').innerHTML = THREAD_ID;
 document.getElementById('output_THREAD_MESSAGE_ID').innerHTML = THREAD_MESSAGE_ID;
 document.getElementById('output_RUN_ID').innerHTML = RUN_ID;
 
+// ----------------------------------------------------
 
-// Assign prompt values
-// Step A
-var upload_files_filename = "file_pdf_txt.pdf" // "file_pdf_img.pdf"; 
+
+
+
+
 	
-// Step B
-var create_an_assistant_assistant_name = "pdf_txt transcriber"; //"pdf_img transcriber";
-var create_an_assistant_description = "You are a helpful PDF document content reading assistant that prints the text content in files.";
-var create_an_assistant_instructions = "You are a helpful PDF document content reading assistant that responds concisely. Read the content of a PDF file and print the content. If the PDF file contains images, use optical character recognition to read the content of the images and print the text. If the PDF file contains encrypted text, decode the encrypted text using base64 decryption. Otherwise, if the PDF file contains readable text, print the text. Format the output concisely with only the response, use the least number of words.";
+// ----------------------------------------------------
+// 
+// ----------------------------------------------------
+async function assign_the_task_prompts(){
+
+	const generate_a_plot = document.getElementById("generate_a_plot").checked;
+	const embedding_analysis = document.getElementById("embedding_analysis").checked;
+	const extract_text_from_image = document.getElementById("extract_text_from_image").checked;
+	const give_response_using_file = document.getElementById("give_response_using_file").checked;
+
+	// Step A
+	var upload_files_filename = document.getElementById("file_name").value; 
+
+	// ------------------------
+
+
+	if (generate_a_plot == false && embedding_analysis == false && extract_text_from_image == false && give_response_using_file == false) {
+
+		document.getElementById("error").innerText = "Check one of the available Assistant tasks.";
+	}
 	
-// Step C
-var create_a_thread_content = "Read the content of a PDF file and print the content. If the PDF file contains images, use optical character recognition to read the content of the images and print the text. If the PDF file contains encrypted text, decode the encrypted text using base64 decryption. Otherwise, if the PDF file contains readable text, print the text. Format the output concisely with only the response, use the least number of words.";
+      if (generate_a_plot == true && embedding_analysis == false && extract_text_from_image == false && give_response_using_file == false) {
+	      
+	// Step B
+	var create_an_assistant_assistant_name = "plot generator";
+	var create_an_assistant_description = "You are a helpful plot generating assistant that plots data from a file.";
+	var create_an_assistant_instructions = "You are a helpful plot generating assistant that responds concisely. Read the content of a file and plot each column on the same x-axis.";
+		
+	// Step C
+	var create_a_thread_content = "Read the content of a file and plot each column on the same x-axis.";
+		
+	// Step D
+	var add_a_message_to_a_thread_content = "Read the content of a file and plot each column on the same x-axis.";  
+      }
+
 	
-// Step D
-var add_a_message_to_a_thread_content = "Read the content of a PDF file and print the content. If the PDF file contains images, use optical character recognition to read the content of the images and print the text. If the PDF file contains encrypted text, decode the encrypted text using base64 decryption. Otherwise, if the PDF file contains readable text, print the text. Format the output concisely with only the response, use the least number of words.";
+	// ------------------------
+
+	
+      if (generate_a_plot == false && embedding_analysis == true && extract_text_from_image == false && give_response_using_file == false) {
+		
+	// Step B
+	var create_an_assistant_assistant_name = "embedding analysis assistant";
+	var create_an_assistant_description = "You are a helpful embedding analysis assistant that calculates the cosine similarity between each embedding, and then lists the embeddings from most similar to least similar.";
+	var create_an_assistant_instructions = "You are a helpful embedding analysis assistant that responds concisely, only outputting the value. Read the content of a file row-by-row, calculate the embedding for each row, then perform cosine similarity comparing each row with respect to the other rows and calculate the average cosine similarity per row, finally list each row with it's average cosine similarity per row from highest cosine similarity value to lowest cosine similarity value.";
+		
+	// Step C
+	var create_a_thread_content = "Read the content of a file row-by-row, calculate the embedding for each row, then perform cosine similarity comparing each row with respect to the other rows and calculate the average cosine similarity per row, finally list each row with it's average cosine similarity per row from highest cosine similarity value to lowest cosine similarity value.";
+		
+	// Step D
+	var add_a_message_to_a_thread_content = "Read the content of a file row-by-row, calculate the embedding for each row, then perform cosine similarity comparing each row with respect to the other rows and calculate the average cosine similarity per row, finally list each row with it's average cosine similarity per row from highest cosine similarity value to lowest cosine similarity value.";
+      }
+
+
+	// ------------------------
+
+	
+      if (generate_a_plot == false && embedding_analysis == false && extract_text_from_image == true && give_response_using_file == false) {
+	      
+	// Step B
+	var create_an_assistant_assistant_name = "pdf_txt transcriber"; //"pdf_img transcriber";
+	var create_an_assistant_description = "You are a helpful PDF document content reading assistant that prints the text content in files.";
+	var create_an_assistant_instructions = "You are a helpful PDF document content reading assistant that responds concisely. Read the content of a PDF file and print the content. If the PDF file contains images, use optical character recognition to read the content of the images and print the text. If the PDF file contains encrypted text, decode the encrypted text using base64 decryption. Otherwise, if the PDF file contains readable text, print the text. Format the output concisely with only the response, use the least number of words.";
+		
+	// Step C
+	var create_a_thread_content = "Read the content of a PDF file and print the content. If the PDF file contains images, use optical character recognition to read the content of the images and print the text. If the PDF file contains encrypted text, decode the encrypted text using base64 decryption. Otherwise, if the PDF file contains readable text, print the text. Format the output concisely with only the response, use the least number of words.";
+		
+	// Step D
+	var add_a_message_to_a_thread_content = "Read the content of a PDF file and print the content. If the PDF file contains images, use optical character recognition to read the content of the images and print the text. If the PDF file contains encrypted text, decode the encrypted text using base64 decryption. Otherwise, if the PDF file contains readable text, print the text. Format the output concisely with only the response, use the least number of words.";
+      }
+
+
+	// ------------------------
+
+	
+      if (generate_a_plot == false && embedding_analysis == false && extract_text_from_image == false && give_response_using_file == true) {
+
+
+	      document.getElementById("prompt").style.display = "block";
+	      var prompt = document.getElementById("prompt").value; 
+	      
+	// Step B
+	var create_an_assistant_assistant_name = "give a response using file";
+	var create_an_assistant_description = "You are a helpful document content reading and analyzing assistant that responds to content in a file.";
+	var create_an_assistant_instructions = "You are a helpful document content reading and analyzing assistant that responds to content in a file concisely, using the least number of words. Read the content of a file and: "+prompt+".";
+		
+	// Step C
+	var create_a_thread_content = "Read the content of a PDF file respond to the following request: "+prompt+". Format the output concisely with only the response, use the least number of words.";
+		
+	// Step D
+	var add_a_message_to_a_thread_content = "Read the content of a PDF file respond to the following request: "+prompt+". Format the output concisely with only the response, use the least number of words.";
+      }
+	
+
+	// ------------------------
+
+}
+
+	
 
 // ----------------------------------------------------
 // Step 0
@@ -166,6 +280,7 @@ async function show_pdf_wo_CORS() {
 // ----------------------------------------------------
 async function extract_text_from_pdf_using_OpenAI_assistant() {
 
+	
 	// Step A: outputs FILE_ID
 	await upload_files()
 		// Step B: outputs ASSISTANT_ID
@@ -188,7 +303,8 @@ async function extract_text_from_pdf_using_OpenAI_assistant() {
 // Step A
 async function upload_files() {
 	
-	await fetch(document.getElementById("file_download_url").value)
+	await assign_the_task_prompts()
+		.then(async function() { return await fetch(document.getElementById("file_download_url").value); })
 		.then(response => response.blob())
 		.then(async function(pdf_blob_object) { 
 			// return pdf_blob_object; 
@@ -269,8 +385,9 @@ async function create_an_assistant() {
 	var options = {method : 'POST', headers: headers, body : JSON.stringify(data)};
 	
 	// ------------------------------------------
-	
-	await fetch(url, options)
+	assign_the_task_prompts
+	await assign_the_task_prompts()
+		.then(async function() { return await fetch(url, options); })
 		.then(res => res.json())
 		.then(res => { 
 			let output = JSON.parse(JSON.stringify(res));
@@ -321,8 +438,9 @@ async function create_a_thread() {
 	var options = {method : 'POST', headers: headers, body : JSON.stringify(data)};
 	
 	// ------------------------------------------
-	
-	await fetch(url, options)
+
+	await assign_the_task_prompts()
+		.then(async function() { return await fetch(url, options); })
 	 	.then(response => response.json())
 	 	.then(async function(result) {
 			let output = JSON.parse(JSON.stringify(result));
@@ -358,8 +476,9 @@ async function add_a_message_to_a_thread() {
 	
 	var data = {"role": "user", "content": add_a_message_to_a_thread_content};
 	var options = {method : 'post', headers: headers, body : JSON.stringify(data)};
-	
-	await fetch(url, options)
+
+	await assign_the_task_prompts()
+		.then(async function() { return await fetch(url, options); })
 	 	.then(response => response.json())
 	 	.then(async function(result) {
 			let output = JSON.parse(JSON.stringify(result));
