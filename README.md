@@ -5,3 +5,5 @@ Prompt engineering is useful knowledge that everyone should know how to use in o
 [Completed working version of useful engineering prompts] https://CodeSolutions2.github.io/prompt_engineering/index.html
 
 [Completed working version of simple Chat GPT prompt] https://CodeSolutions2.github.io/prompt_engineering/askrobot.html
+
+[Assistant] https://CodeSolutions2.github.io/prompt_engineering/assistant.html
