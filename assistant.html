@@ -23,7 +23,7 @@
         <input type="radio" id="extract_text_from_image" name="radio_name" value="extract_text_from_image" />
         <label for="extract_text_from_image">Extract text on a image file (pdfimage, image)</label>
 	<br>
-        <input type="radio" id="give_response_using_file" name="radio_name" value="give_response_using_file" />
+        <input type="radio" id="give_response_using_file" name="radio_name" value="give_response_using_file" onclick="" />
         <label for="give_response_using_file">Give a response using text file information</label>
 </fieldset>
 
@@ -122,7 +122,17 @@ document.getElementById('output_RUN_ID').innerHTML = RUN_ID;
 
 // ----------------------------------------------------
 
+async function processEvent(event) {
+	
+    if (document.getElementById("give_response_using_file").checked == false) {
+	document.getElementById("prompt").style.display = "none";
+    } else  {
+	document.getElementById("prompt").style.display = "block";
+    }    
 
+}
+
+document.getElementById("give_response_using_file").addEventListener("click", processEvent, false);
 
 
 
