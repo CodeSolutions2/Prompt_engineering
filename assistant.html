@@ -130,6 +130,10 @@ document.getElementById('output_RUN_ID').innerHTML = RUN_ID;
 // ----------------------------------------------------
 // 
 // ----------------------------------------------------
+if (generate_a_plot == false && embedding_analysis == false && extract_text_from_image == false && give_response_using_file == true) {
+	document.getElementById("prompt").style.display = "block";
+}
+	
 async function assign_the_task_prompts(){
 
 	const generate_a_plot = document.getElementById("generate_a_plot").checked;
@@ -203,9 +207,7 @@ async function assign_the_task_prompts(){
 
 	
       if (generate_a_plot == false && embedding_analysis == false && extract_text_from_image == false && give_response_using_file == true) {
-
-
-	      document.getElementById("prompt").style.display = "block";
+	      
 	      var prompt = document.getElementById("prompt").value; 
 	      
 	// Step B
