@@ -9,3 +9,7 @@ Prompt engineering is useful knowledge that everyone should know how to use in o
 [Assistant] https://CodeSolutions2.github.io/prompt_engineering/assistant.html
 
 [Image Generation] https://CodeSolutions2.github.io/prompt_engineering/image_generation.html
+
+
+## Helpful References
+- [GitHub Formatting](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
