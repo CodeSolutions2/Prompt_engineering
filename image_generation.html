@@ -42,12 +42,18 @@
 </select> 
 <br>
 <button id="display_image" onclick="display_image()">display_image</button>
+<br>
+<h3 id="step3_download_button" style="display:none">[Step 3] Download the image</h3>
+<button id="download_button" style="display:none">Download the image</button>
+<br>
+<h3 id="step4_motivational_prompt" style="display:none">[Step 4] Write a motivational prompt on top of image</h3>
+<input id="motivational_prompt" type="text" value="" placeholder="motivational_prompt" rows="10" cols="100" style="display:none; text-align: left; width: 600px;">
+<button id="motivational_prompt_button" style="display:none" onclick="write_message_on_image()">Write motivation on image</button>
+<br>
 </td>
 
 <!-- View results -->
 <td id="display_area">
-<button id="download_button" style="display:none">Download the image</button>
-<br>
 <div style="width:100%;height:100%;position:absolute;vertical-align:middle;text-align:left;"><canvas id="canvas_img" width="224" height="224" style="display:none"></canvas><div>
 <div id="notification" style="font-family:courier;font-size:15px;"></div>
 <div id="error" style="font-family:courier;font-size:15px;"></div>
@@ -75,7 +81,7 @@ th, td {vertical-align: top; border: 0px solid black; padding: 10px; }
 th#pdf_viewer_input {width: 100%; }
 th#pdf_viewer_output {width: 100%; }
 
-button#download_button {width: 50px; background: goldenrod;}
+button#download_button {background: goldenrod;}
 </style>
 
 
@@ -198,19 +204,36 @@ async function display_image(){
 					
 				ctx.drawImage(image, 0,0);
 			};
+			
+			// Download image
+			document.getElementById("step3_download_button").style.display = 'block';
+			document.getElementById("download_button").style.display = 'block';
+			console.log("url: ", image.src);
+			document.getElementById("download_button").onclick = image.src;
+
+			// Write motivational string on image
+			document.getElementById("step4_motivational_prompt").style.display = 'block';
+			document.getElementById("motivational_prompt").style.display = 'block';
+			document.getElementById("motivational_prompt_button").style.display = 'block';
 		})
-		.then(async function() { document.getElementById("download_button").style.display = 'block';
-					const link = document.createElement("a");
-					link.setAttribute("href", url);
-					link.setAttribute("download", 'img.png');
-					console.log("link: ", link);
-					console.log("url: ", url);
-				       document.getElementById("download_button").onclick = url;
-				       })
 		.catch(error => { document.getElementById('error').innerHTML = error; });
 
 
 }
+
+	
+// -------------------------------------------------
+
+
+async function write_message_on_image() {
+
+	ctx.font = "48px serif";
+	ctx.textAlign = "center";
+  ctx.fillText(document.getElementById("motivational_prompt").value, 10, 50);
+
+
+}
+
 
 // -------------------------------------------------
 
