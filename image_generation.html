@@ -5,11 +5,13 @@
 
 <h1>OpenAI Generate Image</h1>
 
-<h3>[Step 0] Enter Key and prompt</h3>
+<h3>[Step 0] Enter Key</h3>
 <input id="OPENAI_API_KEY" type="text" value="" placeholder="OPENAI_API_KEY" rows="10" cols="100" style="display:block; text-align: left; width: 150px;">
 <br>
-<input id="prompt" type="text" value="" placeholder="prompt" rows="10" cols="100" style="display:none; text-align: left; width: 600px;">
+<h3>[Step 1] Enter a text description to create an image</h3>
+<input id="prompt" type="text" value="" placeholder="prompt" rows="10" cols="100" style="display:block; text-align: left; width: 600px;">
 <br>
+<h3>[Step 2] Select a model and image size</h3>
 <fieldset>
 <input type="radio" id="dalle2" name="radio_name" value="dalle2" />
 <label for="dalle2">dall-e-2</label>
@@ -33,7 +35,7 @@
   <option value="1024x1792">1024x1792</option>
 </select> 
 <br>
-<button id="display_image" onclick="display_image()">display_image</button>
+<button id="display_image" onclick="call_API()">display_image</button>
 
 
 <!-- Output text -->
@@ -97,7 +99,7 @@ async function call_API(){
   
   var url = 'https://api.openai.com/v1/images/generations';
   
-	var headers = {"Content-Type": "application/json", 
+  var headers = {"Content-Type": "application/json", 
 		       "Authorization": 'Bearer ' + document.getElementById("OPENAI_API_KEY").value}
 
   var image_size = document.getElementById("image_size_list").value;
@@ -121,9 +123,6 @@ async function call_API(){
   		    "prompt": document.getElementById("prompt").value, 
   		    "n": 1, 
   		    "size": image_size};
-
-  
-	
 	
 	// --------------------
 	
@@ -148,7 +147,6 @@ async function call_API(){
 async function display_image(){
 
   try {
-      
       const image = new Image();
 
       // Call the API to get the URL
@@ -156,8 +154,8 @@ async function display_image(){
 
       image.onload = function (){ 
           // Draw image on canvas
-            document.getElementById("canvas_img").style.display = "block";
-            ctx.drawImage(image, 0,0);
+	      document.getElementById("canvas_img").style.display = "block";
+	      ctx.drawImage(image, 0,0);
       };
 
     } catch (error) {
