@@ -46,6 +46,8 @@
 
 <!-- View results -->
 <td id="display_area">
+<button id="download_button">Download the image</button>
+<br>
 <div style="width:100%;height:100%;position:absolute;vertical-align:middle;text-align:left;"><canvas id="canvas_img" width="224" height="224" style="display:none"></canvas><div>
 <div id="notifications" style="font-family:courier;font-size:15px;"></div>
 <div id="errors" style="font-family:courier;font-size:15px;"></div>
@@ -197,7 +199,12 @@ async function display_image(){
 				ctx.drawImage(image, 0,0);
 			};
 		})
-		.then(async function() { await download_data_wo_fetch(); })
+		.then(async function() { document.getElementById("download_button").style.display = 'block';
+					const link = document.createElement("a");
+					link.setAttribute("href", url);
+					link.setAttribute("download", 'img.png');
+				       document.getElementById("download_button").onclick = link;
+				       })
 		.catch(error => { document.getElementById('error').innerHTML = error; });
 
 
@@ -205,40 +212,6 @@ async function display_image(){
 
 // -------------------------------------------------
 
-async function download_data_wo_fetch() {
-
-	
-    // if this works then url is the file_download_url and fetch is not necessary
-
-const bloburl = url;
-const link = document.createElement("a");
-link.setAttribute("href", bloburl);
- const filename = 'img.png';
-    link.setAttribute("download", filename);
-
-
-    let button = document.createElement("button");
-	button.setAttribute("id", "download_button");
-	button.setAttribute("value", "Download the image");
-	
-	//let svg = document.createElement("svg");
-	//svg.setAttribute("aria-hidden", true);
-	//svg.setAttribute("viewBox", "0 0 10 10");
-
-	//let path = document.createElement("path");
-	//path.setAttribute("d", "M7 9L5 8 3 9V6L1 4h3l1-3 1 3h3L7 6z");
-	//svg.append(path);
-	//button.append(svg);
-	button.onclick = link;
-	
-    // link.style.display = 'block';
-	button.style.display = 'block';
-	
-    document.getElementById("display_area").appendChild(button);
-
-
-    
-}
 	
 async function download_data_w_fetch() {
 
