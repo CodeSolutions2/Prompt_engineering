@@ -35,7 +35,7 @@
   <option value="1024x1792">1024x1792</option>
 </select> 
 <br>
-<button id="display_image" onclick="call_API()">display_image</button>
+<button id="display_image" onclick="display_image()">display_image</button>
 
 
 <!-- Output text -->
@@ -141,7 +141,8 @@ async function call_API() {
 			.then(res => res.json())
 			.then(res => { 
 				let output = JSON.parse(JSON.stringify(res)); 
-				console.log('output: ', output); return output;
+				console.log('url: ', output["data"][0]["url"]); 
+				return output["data"][0]["url"];
 			})
 			.catch(error => { document.getElementById('error').innerHTML = error; });
 	}
@@ -168,7 +169,7 @@ async function display_image(){
       };
 
     } catch (error) {
-        document.getElementById("error") = error;
+        document.getElementById("error").innerHTML = error;
     }
 
 }
