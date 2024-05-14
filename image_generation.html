@@ -87,7 +87,8 @@ async function processEvent_dalle3(event) {
 document.getElementById("dalle2").addEventListener("click", processEvent_dalle2, false);
 document.getElementById("dalle3").addEventListener("click", processEvent_dalle3, false);
 
-
+// ------------------------------------------
+	
 
 const ctx = document.getElementById("canvas_img").getContext("2d");
 
@@ -113,26 +114,12 @@ async function call_API(){
       document.getElementById('error').innerHTML = "Select a model name";
     }
 
-  if (model_name == "dall-e-2") {
-      if (image_size == '256x256' || image_size == '512x512' || image_size == '1024x1024') {
-        var data = {"model": model_name,
+  var data = {"model": model_name,
   		    "prompt": document.getElementById("prompt").value, 
   		    "n": 1, 
   		    "size": image_size};
-      } else {
-        document.getElementById('error').innerHTML = "The model dall-e-2 can only generate images of size: 256x256, 512x512, and 1024x1024. Select the correct model type with size.";
-      }
-  } else {
-      if (image_size == '1024x1024' || image_size == '1792x1024' || image_size == '1024x1792') {
-        var data = {"model": model_name,
-  		    "prompt": document.getElementById("prompt").value, 
-  		    "n": 1, 
-  		    "size": image_size};
-      } else {
-        document.getElementById('error').innerHTML = "The model dall-e-3 can only generate images of size: 1024x1024, 1792x1024, and 1024x1792. Select the correct model type with size.";
-      }
 
-  }
+  
 	
 	
 	// --------------------
