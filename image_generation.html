@@ -42,7 +42,6 @@
 </select> 
 <br>
 <button id="display_image" onclick="display_image()">display_image</button>
-<button id="display_image0" onclick="display_image0()">display_image0</button>
 </td>
 
 <!-- View results -->
@@ -79,7 +78,7 @@ th {border: 1px solid black; padding: 10px 20px;}
 
 var model_name = "";
 var image_size = "";
-var bloburl = "";
+var url = "";
 	
 // ------------------------------------------
 
@@ -153,9 +152,9 @@ async function call_API() {
 			.then(res => res.json())
 			.then(res => { 
 				let output = JSON.parse(JSON.stringify(res)); 
-				bloburl = output["data"][0]["url"];
-				console.log('bloburl: ', bloburl); 
-				return bloburl;
+				url = output["data"][0]["url"];
+				console.log('url: ', url); 
+				return url;
 			})
 			.catch(error => { document.getElementById('error').innerHTML = error; });
 	}
@@ -166,34 +165,6 @@ async function call_API() {
 	
 // ------------------------------------------
 
-async function display_image0(){
-	
-	try {
-		const image = new Image();
-		
-		image.src = await call_API();
-		// OR
-		// image.src = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-MpmW6OOcWlWnXvFQGjkMPQYq/user-TSIRyCpsFyLvLIf4BlwNRZmW/img-RSA8WEPY0xqX0OrisAF0FBqV.png?st=2024-05-14T11%3A08%3A38Z&se=2024-05-14T13%3A08%3A38Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-05-13T23%3A24%3A21Z&ske=2024-05-14T23%3A24%3A21Z&sks=b&skv=2021-08-06&sig=2uPTLG7rIjoxZgXisc1tvzspFG/MmbYz6HiyE9pwTIo%3D";
-		// bloburl = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-MpmW6OOcWlWnXvFQGjkMPQYq/user-TSIRyCpsFyLvLIf4BlwNRZmW/img-RSA8WEPY0xqX0OrisAF0FBqV.png?st=2024-05-14T11%3A08%3A38Z&se=2024-05-14T13%3A08%3A38Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-05-13T23%3A24%3A21Z&ske=2024-05-14T23%3A24%3A21Z&sks=b&skv=2021-08-06&sig=2uPTLG7rIjoxZgXisc1tvzspFG/MmbYz6HiyE9pwTIo%3D";
-		
-		image.onload = function () { 
-			// Draw image on canvas
-			document.getElementById("canvas_img").style.display = "block";
-			document.getElementById("canvas_img").width = Number(image_size.split('x').pop());
-			document.getElementById("canvas_img").height = Number(image_size.split('x').shift());
-			ctx.drawImage(image, 0,0);
-		};
-		
-		
-		await download_data();
-		
-	
-	} catch (error) {
-		document.getElementById("error").innerHTML = error;
-	}
-
-}
-	
 	
 async function display_image(){
 	
@@ -202,21 +173,27 @@ async function display_image(){
 			
 			const image = new Image();
 			
-			//image.src = await call_API();
+			// image.src = await call_API();
 			// OR
-
-	
 			image.src = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-MpmW6OOcWlWnXvFQGjkMPQYq/user-TSIRyCpsFyLvLIf4BlwNRZmW/img-PY62WGTUZsd1yQC5pWfY3COO.png?st=2024-05-14T12%3A17%3A04Z&se=2024-05-14T14%3A17%3A04Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-05-13T20%3A04%3A11Z&ske=2024-05-14T20%3A04%3A11Z&sks=b&skv=2021-08-06&sig=KhV8MeIDZPzVj5SPWiVx4NA18fY122ng3TyIwLZIJXo%3D";
-			// bloburl = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-MpmW6OOcWlWnXvFQGjkMPQYq/user-TSIRyCpsFyLvLIf4BlwNRZmW/img-PY62WGTUZsd1yQC5pWfY3COO.png?st=2024-05-14T12%3A17%3A04Z&se=2024-05-14T14%3A17%3A04Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-05-13T20%3A04%3A11Z&ske=2024-05-14T20%3A04%3A11Z&sks=b&skv=2021-08-06&sig=KhV8MeIDZPzVj5SPWiVx4NA18fY122ng3TyIwLZIJXo%3D";
+			url = image.src;
+			
 			image.onload = await function () { 
 				// Draw image on canvas
 				document.getElementById("canvas_img").style.display = "block";
-				document.getElementById("canvas_img").width = Number(image_size.split('x').pop());
-				document.getElementById("canvas_img").height = Number(image_size.split('x').shift());
+				
+				let width = Number(image_size.split('x').pop());
+				console.log('width: ', width);
+				document.getElementById("canvas_img").width = 256;
+
+				let height = Number(image_size.split('x').shift());
+				console.log('height: ', height);
+				document.getElementById("canvas_img").height = 256;
+					
 				ctx.drawImage(image, 0,0);
 			};
 		})
-		//.then(async function() { await download_data(); })
+		.then(async function() { await download_data(); })
 		.catch(error => { document.getElementById('error').innerHTML = error; });
 
 
@@ -226,19 +203,17 @@ async function display_image(){
 
 	
 async function download_data() {
-    
+
+	
     // ---------------------
-    // Puts array into csv format
-    // const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
-
-    // Create a url for the data object
-    // const bloburl = URL.createObjectURL(blob);
-    // ---------------------
-
-    const link = document.createElement("a");
-    link.setAttribute("href", bloburl);
-
-    const filename = 'img.png';
+    await fetch(url)
+	.then(response => response.blob())
+		.then(async function(blob_object) { 
+			// Create a url for the data object
+			const bloburl = URL.createObjectURL(blob_object);
+			const link = document.createElement("a");
+			link.setAttribute("href", bloburl);
+			 const filename = 'img.png';
     link.setAttribute("download", filename);
 
 
@@ -252,17 +227,15 @@ async function download_data() {
 	path.setAttribute("d", "M7 9L5 8 3 9V6L1 4h3l1-3 1 3h3L7 6z");
 	svg.append(path);
 	button.append(svg);
-	
-	button.onclick = link.click();
+	button.onclick = link;
 	
     // link.style.display = 'block';
 	button.style.display = 'block';
 	
     document.getElementById("display_area").appendChild(button);
+		})
 
-    // Automatic download of csv
-    // link.click();  // to have the PC prompt where to save the file
-    // document.body.removeChild(link);
+    
 }
 
 	
