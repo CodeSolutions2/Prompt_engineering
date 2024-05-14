@@ -246,8 +246,19 @@ async function write_message_on_image() {
 	ctx.textAlign = "left";
 	let x = 30;
 	let y = 50
+
+	let width = Number(image_size.split('x').pop());
+	let height = Number(image_size.split('x').shift());
+	if (width == 256) {
+		let img_width = 10;
+	} else if (width == 512) {
+		let img_width = 15;
+	} else if (width == 1024) {
+		let img_width = 30;
+	} else {
+		let img_width = 50;
+	}
 	
-	let img_width = 10;
 
 	let text = document.getElementById("motivational_prompt").value;
 
@@ -260,7 +271,7 @@ async function write_message_on_image() {
 
 		if (c > img_width){
 			cut_text.push(word_list.join(' '));
-			word_list = [];
+			word_list = [word];
 			c=0;
 		} else {
 			word_list.push(word);
