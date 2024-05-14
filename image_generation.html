@@ -74,6 +74,8 @@ tr {vertical-align: top; border: 0px solid black; padding: 10px 10px; }
 th, td {vertical-align: top; border: 0px solid black; padding: 10px; }
 th#pdf_viewer_input {width: 100%; }
 th#pdf_viewer_output {width: 100%; }
+
+button#download_button {width: 50px; background: goldenrod;}
 </style>
 
 
@@ -189,11 +191,11 @@ async function display_image(){
 				document.getElementById("canvas_img").style.display = "block";
 				
 				let width = Number(image_size.split('x').pop());
-				console.log('width: ', width);
+				// console.log('width: ', width);
 				document.getElementById("canvas_img").width = width;
 
 				let height = Number(image_size.split('x').shift());
-				console.log('height: ', height);
+				// console.log('height: ', height);
 				document.getElementById("canvas_img").height = height;
 					
 				ctx.drawImage(image, 0,0);
@@ -203,7 +205,9 @@ async function display_image(){
 					const link = document.createElement("a");
 					link.setAttribute("href", url);
 					link.setAttribute("download", 'img.png');
-				       document.getElementById("download_button").onclick = link;
+					console.log("link: ", link);
+					console.log("url: ", url);
+				       document.getElementById("download_button").onclick = url;
 				       })
 		.catch(error => { document.getElementById('error').innerHTML = error; });
 
