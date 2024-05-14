@@ -65,6 +65,10 @@ th {border: 1px solid black; padding: 10px 20px;}
 	
 <script>
 
+var model_name = "";
+var image_size = "";
+
+// ------------------------------------------
 
 async function processEvent_dalle2(event) {
     if (this.getAttribute("checked") == false) {
@@ -95,49 +99,54 @@ document.getElementById("dalle3").addEventListener("click", processEvent_dalle3,
 const ctx = document.getElementById("canvas_img").getContext("2d");
 
 
-async function call_API(){
-  
-  var url = 'https://api.openai.com/v1/images/generations';
-  
-  var headers = {"Content-Type": "application/json", 
+async function call_API() {
+	var url = 'https://api.openai.com/v1/images/generations';
+	
+	var headers = {"Content-Type": "application/json", 
 		       "Authorization": 'Bearer ' + document.getElementById("OPENAI_API_KEY").value}
-
-  var image_size = document.getElementById("image_size_list").value;
-
-  const dalle2 = document.getElementById("dalle2").checked;
-  const dalle3 = document.getElementById("dalle3").checked;
-  if (dalle2 == true && dalle3 == false) {
-      var model_name = 'dall-e-2'
-    }
-    if (dalle2 == false && dalle3 == true) {
-      var model_name = 'dall-e-3'
-    }
-  if (dalle2 == false && dalle3 == false) {
-      document.getElementById('error').innerHTML = "Select a model name";
-    }
+		
+	const dalle2 = document.getElementById("dalle2").checked;
+	const dalle3 = document.getElementById("dalle3").checked;
+	
+	if (dalle2 == true && dalle3 == false) {
+		model_name = 'dall-e-2';
+		image_size = document.getElementById("image_size_list_dalle2").value;
+	}
+	
+	if (dalle2 == false && dalle3 == true) {
+		model_name = 'dall-e-3';
+		image_size = document.getElementById("image_size_list_dalle3").value;
+	}
+	
+	if (dalle2 == false && dalle3 == false) {
+		document.getElementById('error').innerHTML = "Select a model name and image size.";
+	}
 	
 	console.log("model_name: ", model_name);
 	console.log("image_size: ", image_size);
 
-  var data = {"model": model_name,
+	var out = "";
+	
+	if (model_name.length > 0) {
+		
+		var data = {"model": model_name,
   		    "prompt": document.getElementById("prompt").value, 
   		    "n": 1, 
   		    "size": image_size};
-	
-	// --------------------
-	
-	var options = {method : 'POST', headers: headers, body : JSON.stringify(data)};
-	
-	// ------------------------------------------
-	
-	return await fetch(url, options)
-		.then(res => res.json())
-		.then(res => { 
-			let output = JSON.parse(JSON.stringify(res));
-      console.log('output: ', output)
-		})
-		.catch(error => { document.getElementById('error').innerHTML = error; });
+		
+		var options = {method : 'POST', headers: headers, body : JSON.stringify(data)};
+		
+		
+		out = await fetch(url, options)
+			.then(res => res.json())
+			.then(res => { 
+				let output = JSON.parse(JSON.stringify(res)); 
+				console.log('output: ', output); return output;
+			})
+			.catch(error => { document.getElementById('error').innerHTML = error; });
+	}
 
+	return out;
 }
 
 	
