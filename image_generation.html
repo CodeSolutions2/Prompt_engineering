@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+
+<h1>OpenAI Generate Image</h1>
+
+<h3>[Step 0] Enter Key and prompt</h3>
+<input id="OPENAI_API_KEY" type="text" value="" placeholder="OPENAI_API_KEY" rows="10" cols="100" style="display:block; text-align: left; width: 150px;">
+<br>
+<input id="prompt" type="text" value="" placeholder="prompt" rows="10" cols="100" style="display:none; text-align: left; width: 600px;">
+<br>
+<fieldset>
+<input type="radio" id="dalle2" name="radio_name" value="dalle2" />
+<label for="dalle2">dall-e-2</label>
+<br>
+<input type="radio" id="dalle3" name="radio_name" value="dalle3" />
+<label for="dalle3">dall-e-3</label>
+</fieldset>
+<br>
+<!-- Drop down menu -->
+<!-- 256x256, 512x512, or 1024x1024 for dall-e-2 -->
+<!-- 1024x1024, 1792x1024, or 1024x1792 for dall-e-3 -->
+<label for="image_size">Select a desired image size:</label>
+<select name="image_size_list_dalle2" id="image_size_list_dalle2" style="display:none">
+  <option value="256x256">256x256</option>
+  <option value="512x512">512x512</option>
+  <option value="1024x1024">1024x1024</option>
+</select>
+<select name="image_size_list_dalle3" id="image_size_list_dalle3" style="display:none">
+  <option value="1024x1024">1024x1024</option>
+  <option value="1792x1024">1792x1024</option>
+  <option value="1024x1792">1024x1792</option>
+</select> 
+  
+<button id="display_image" onclick="display_image()">display_image</button>
+
+
+<!-- Output text -->
+<div style="width:100%;height:100%;position:absolute;vertical-align:middle;text-align:left;">
+<canvas id="canvas_img" width="224" height="224" style="display:none"></canvas>
+<div>
+<div id="notifications" style="font-family:courier;font-size:15px;"></div>
+<div id="errors" style="font-family:courier;font-size:15px;"></div>
+
+<!-- --------------------------------------------------- -->
+
+<style>
+canvas {border: 1px solid black; position: absolute; display: inline-block; z-index: 1; top: 150px;}
+
+div {position: relative; z-index: 2;}
+div#notifications {color: #3236a8; position: relative; z-index: 0;}
+div#errors {color: #bd1f17; position: relative; z-index: 0;}
+
+table {border-collapse: collapse;}
+td,
+th {border: 1px solid black; padding: 10px 20px;}
+</style>
+
+
+
+<!-- --------------------------------------------------- -->
+	
+<script>
+
+
+async function processEvent_dalle2(event) {
+    if (this.getAttribute("checked") == false) {
+	document.getElementById("image_size_list_dalle2").style.display = "none";
+      document.getElementById("image_size_list_dalle3").style.display = "none";
+    } else  {
+	document.getElementById("image_size_list_dalle2").style.display = "block";
+  document.getElementById("image_size_list_dalle3").style.display = "none";
+    }    
+}
+
+async function processEvent_dalle3(event) {
+    if (this.getAttribute("checked") == false) {
+      document.getElementById("image_size_list_dalle2").style.display = "none";
+	document.getElementById("image_size_list_dalle3").style.display = "none";
+    } else  {
+	document.getElementById("image_size_list_dalle2").style.display = "none";
+  document.getElementById("image_size_list_dalle3").style.display = "block";
+    }    
+}
+
+document.getElementById("dalle2").addEventListener("click", processEvent_dalle2, false);
+document.getElementById("dalle3").addEventListener("click", processEvent_dalle3, false);
+
+
+
+const ctx = document.getElementById("canvas_img").getContext("2d");
+
+
+async function call_API(){
+  
+  var url = 'https://api.openai.com/v1/images/generations';
+  
+	var headers = {"Content-Type": "application/json", 
+		       "Authorization": 'Bearer ' + document.getElementById("OPENAI_API_KEY").value}
+
+  var image_size = document.getElementById("image_size_list").value;
+
+  const dalle2 = document.getElementById("dalle2").checked;
+  const dalle3 = document.getElementById("dalle3").checked;
+  if (dalle2 == true && dalle3 == false) {
+      var model_name = 'dall-e-2'
+    }
+    if (dalle2 == false && dalle3 == true) {
+      var model_name = 'dall-e-3'
+    }
+  if (dalle2 == false && dalle3 == false) {
+      document.getElementById('error').innerHTML = "Select a model name";
+    }
+
+  if (model_name == "dall-e-2") {
+      if (image_size == '256x256' || image_size == '512x512' || image_size == '1024x1024') {
+        var data = {"model": model_name,
+  		    "prompt": document.getElementById("prompt").value, 
+  		    "n": 1, 
+  		    "size": image_size};
+      } else {
+        document.getElementById('error').innerHTML = "The model dall-e-2 can only generate images of size: 256x256, 512x512, and 1024x1024. Select the correct model type with size.";
+      }
+  } else {
+      if (image_size == '1024x1024' || image_size == '1792x1024' || image_size == '1024x1792') {
+        var data = {"model": model_name,
+  		    "prompt": document.getElementById("prompt").value, 
+  		    "n": 1, 
+  		    "size": image_size};
+      } else {
+        document.getElementById('error').innerHTML = "The model dall-e-3 can only generate images of size: 1024x1024, 1792x1024, and 1024x1792. Select the correct model type with size.";
+      }
+
+  }
+	
+	
+	// --------------------
+	
+	var options = {method : 'POST', headers: headers, body : JSON.stringify(data)};
+	
+	// ------------------------------------------
+	
+	return await fetch(url, options)
+		.then(res => res.json())
+		.then(res => { 
+			let output = JSON.parse(JSON.stringify(res));
+      console.log('output: ', output)
+		})
+		.catch(error => { document.getElementById('error').innerHTML = error; });
+
+}
+
+
+async function display_image(){
+
+  try {
+      
+      const image = new Image();
+
+      // Call the API to get the URL
+      image.src = await call_API();
+
+      image.onload = function (){ 
+          // Draw image on canvas
+            document.getElementById("canvas_img").style.display = "block";
+            ctx.drawImage(image, 0,0);
+      };
+
+    } catch (error) {
+        document.getElementById("error") = error;
+    }
+
+
+</script>
+
+</body>
+</html>
